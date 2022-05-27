@@ -1,6 +1,7 @@
 package com.michal.technicaltask.data.network.di
 
 import com.michal.technicaltask.data.network.AuthInterceptor
+import com.michal.technicaltask.data.network.HeaderInterceptor
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -20,8 +21,10 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        authInterceptor: AuthInterceptor
+        authInterceptor: AuthInterceptor,
+        headerInterceptor: HeaderInterceptor
     ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(headerInterceptor)
         .addInterceptor(authInterceptor)
         .build()
 }

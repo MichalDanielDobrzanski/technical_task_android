@@ -1,5 +1,6 @@
 package com.michal.technicaltask.data.user.di
 
+import com.michal.technicaltask.data.network.retrofit.RetrofitResponseMapper
 import com.michal.technicaltask.data.user.UsersApiService
 import com.michal.technicaltask.data.user.UsersRepository
 import com.michal.technicaltask.data.user.UsersRepositoryImpl
@@ -21,8 +22,9 @@ object UsersModule {
     @Provides
     @Singleton
     fun provideUsersRepository(
-        usersApiService: UsersApiService
-    ): UsersRepository = UsersRepositoryImpl(usersApiService)
+        usersApiService: UsersApiService,
+        retrofitResponseMapper: RetrofitResponseMapper
+    ): UsersRepository = UsersRepositoryImpl(usersApiService, retrofitResponseMapper)
 
     @Provides
     @Singleton
@@ -31,7 +33,7 @@ object UsersModule {
         moshi: Moshi
     ): UsersApiService =
         Retrofit.Builder()
-            .baseUrl("https://gorest.co.in/public/v2")
+            .baseUrl("https://gorest.co.in/public/v2/")
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .client(okHttpClient)

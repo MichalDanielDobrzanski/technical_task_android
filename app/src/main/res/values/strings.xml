@@ -11,4 +11,15 @@
     <string name="network_error_retry_text">Retry</string>
 
     <string name="no_results_text">No results. The list is empty.</string>
+
+    <string name="add_user_title">Add new user</string>
+
+    <string name="cancel_text">Cancel</string>
+    <string name="ok_text">OK</string>
+
+    <string name="add_user_name_prompt_text">Insert user name:</string>
+    <string name="add_user_email_prompt_text">Insert user email:</string>
+    <string name="invalid_email_error">Invalid email address</string>
+    <string name="empty_name_error">Name cannot be empty</string>
+    <string name="operation_failed_error">Operation failed</string>
 </resources>

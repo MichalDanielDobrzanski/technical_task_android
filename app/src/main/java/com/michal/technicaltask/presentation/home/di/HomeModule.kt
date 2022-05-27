@@ -4,9 +4,13 @@ import com.michal.technicaltask.data.user.UsersRepository
 import com.michal.technicaltask.domain.user.all.GetAllUsersUseCase
 import com.michal.technicaltask.domain.user.all.mapper.GetAllUsersMapper
 import com.michal.technicaltask.domain.user.all.mapper.GetAllUsersMapperImpl
+import com.michal.technicaltask.domain.user.create.AddNewUserUseCase
+import com.michal.technicaltask.domain.user.create.mapper.UserMapper
+import com.michal.technicaltask.domain.user.create.mapper.UserMapperImpl
 import com.michal.technicaltask.presentation.home.adapter.UserAdapterItemMapper
 import com.michal.technicaltask.presentation.home.adapter.UserAdapterItemMapperImpl
 import com.michal.time.TimeFormatter
+import com.michal.time.TimeProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,8 +30,14 @@ object HomeModule {
     @Provides
     @ViewModelScoped
     fun provideGetAllUsersMapper(
-        timeRepository: com.michal.time.TimeProvider
-    ): GetAllUsersMapper = GetAllUsersMapperImpl(timeRepository)
+        userMapper: UserMapper,
+    ): GetAllUsersMapper = GetAllUsersMapperImpl(userMapper)
+
+    @Provides
+    @ViewModelScoped
+    fun providerUserMapper(
+        timeRepository: TimeProvider
+    ): UserMapper = UserMapperImpl(timeRepository)
 
     @Provides
     @ViewModelScoped
@@ -35,4 +45,11 @@ object HomeModule {
         getAllUsersMapper: GetAllUsersMapper,
         usersRepository: UsersRepository
     ): GetAllUsersUseCase = GetAllUsersUseCase(getAllUsersMapper, usersRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideAddNewUserUseCase(
+        usersRepository: UsersRepository,
+        userMapper: UserMapper
+    ): AddNewUserUseCase = AddNewUserUseCase(usersRepository, userMapper)
 }

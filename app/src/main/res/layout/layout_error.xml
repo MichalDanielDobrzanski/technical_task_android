@@ -11,6 +11,7 @@
         android:text="@string/network_error_message_text" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/retry_button"
         style="@style/RetryButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

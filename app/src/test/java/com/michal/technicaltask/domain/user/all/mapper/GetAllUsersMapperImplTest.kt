@@ -2,6 +2,7 @@ package com.michal.technicaltask.domain.user.all.mapper
 
 import com.michal.technicaltask.data.user.model.UserData
 import com.michal.technicaltask.domain.user.all.model.User
+import com.michal.technicaltask.domain.user.create.mapper.UserMapperImpl
 import com.michal.technicaltask.utils.whenever
 import com.michal.time.TimeProvider
 import com.michal.time.model.DateItem
@@ -44,7 +45,8 @@ class GetAllUsersMapperImplTest {
         MockitoAnnotations.openMocks(this)
 
         whenever(timeProvider.getNow()).thenReturn(nowDateItem)
-        getAllUsersMapperImpl = GetAllUsersMapperImpl(timeProvider)
+        val userMapper = UserMapperImpl(timeProvider)
+        getAllUsersMapperImpl = GetAllUsersMapperImpl(userMapper)
     }
 
     @Test

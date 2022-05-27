@@ -6,4 +6,6 @@ import io.reactivex.rxjava3.core.Single
 interface UsersRepository {
 
     fun getAllUsers(): Single<List<UserData>>
+
+    fun addNewUser(name: String, email: String): Single<UserData>
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer
 import com.michal.technicaltask.domain.user.all.GetAllUsersUseCase
 import com.michal.technicaltask.domain.user.all.model.User
 import com.michal.technicaltask.domain.user.all.model.Users
+import com.michal.technicaltask.domain.user.create.AddNewUserUseCase
 import com.michal.technicaltask.presentation.home.adapter.UserAdapterItemMapper
 import com.michal.technicaltask.presentation.home.adapter.UserItem
 import com.michal.technicaltask.presentation.home.model.UsersViewState
@@ -62,6 +63,9 @@ class HomeViewModelTest {
     private lateinit var getAllUsersUseCase: GetAllUsersUseCase
 
     @Mock
+    private lateinit var addNewUserUseCase: AddNewUserUseCase
+
+    @Mock
     private lateinit var userAdapterItemMapper: UserAdapterItemMapper
 
     @Mock
@@ -90,6 +94,7 @@ class HomeViewModelTest {
         // when
         viewModel = HomeViewModel(
             getAllUsersUseCase,
+            addNewUserUseCase,
             TestSchedulerProvider(),
             userAdapterItemMapper,
         )
@@ -119,6 +124,7 @@ class HomeViewModelTest {
         // when
         viewModel = HomeViewModel(
             getAllUsersUseCase,
+            addNewUserUseCase,
             TestSchedulerProvider(),
             userAdapterItemMapper,
         )
@@ -145,6 +151,7 @@ class HomeViewModelTest {
         // when
         viewModel = HomeViewModel(
             getAllUsersUseCase,
+            addNewUserUseCase,
             TestSchedulerProvider(),
             userAdapterItemMapper,
         )

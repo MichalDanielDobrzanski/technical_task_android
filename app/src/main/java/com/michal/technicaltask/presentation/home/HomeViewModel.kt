@@ -20,7 +20,7 @@ class HomeViewModel @Inject constructor(
     private val userAdapterItemMapper: UserAdapterItemMapper
 ) : BaseViewModel() {
 
-    private val _usersViewState = MutableLiveData<UsersViewState>(UsersViewState.Loading)
+    private val _usersViewState = MutableLiveData<UsersViewState>(UsersViewState.Loading())
     val usersViewState: LiveData<UsersViewState> = _usersViewState
 
     private val getAllUsersDisposable by sequentialDisposable(disposables)
@@ -41,7 +41,7 @@ class HomeViewModel @Inject constructor(
                 },
                 {
                     Timber.e("getAllUsers - onError $it")
-                    _usersViewState.value = UsersViewState.Error
+                    _usersViewState.value = UsersViewState.Error()
                 }
             )
 

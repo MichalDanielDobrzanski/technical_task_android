@@ -7,7 +7,7 @@ import com.michal.time.TimeProvider
 import javax.inject.Inject
 
 class GetAllUsersMapperImpl @Inject constructor(
-    private val timeRepository: TimeProvider
+    private val timeProvider: TimeProvider
 ) : GetAllUsersMapper {
 
     override fun map(usersData: List<UserData>): Users {
@@ -17,7 +17,7 @@ class GetAllUsersMapperImpl @Inject constructor(
                     id = user.id,
                     name = user.name,
                     email = user.email,
-                    creationDate = timeRepository.getNow()
+                    creationDate = timeProvider.getNow()
                 )
             }
         )

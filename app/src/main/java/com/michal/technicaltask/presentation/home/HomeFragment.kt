@@ -49,33 +49,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.usersViewState.observe(viewLifecycleOwner, ::renderList)
+        viewModel.usersViewState.observe(viewLifecycleOwner, ::render)
     }
 
-    private fun renderList(usersViewState: UsersViewState) {
-        when (usersViewState) {
-            UsersViewState.Loading -> {
-                binding.homeProgressBar.isVisible = true
-                binding.homeErrorLayout.root.isVisible = false
-                binding.homeUsersRecyclerView.isVisible = false
-                binding.homeEmptyLayout.root.isVisible = false
-            }
-            is UsersViewState.Content -> {
-                binding.homeProgressBar.isVisible = false
-                binding.homeErrorLayout.root.isVisible = false
-                if (usersViewState.userItems.isEmpty()) {
-                    binding.homeEmptyLayout.root.isVisible = true
-                } else {
-                    binding.homeUsersRecyclerView.isVisible = true
-                    adapter?.submitList(usersViewState.userItems)
-                }
-            }
-            UsersViewState.Error -> {
-                binding.homeProgressBar.isVisible = false
-                binding.homeErrorLayout.root.isVisible = true
-                binding.homeUsersRecyclerView.isVisible = false
-                binding.homeEmptyLayout.root.isVisible = false
-            }
+    private fun render(usersViewState: UsersViewState) {
+        binding.homeProgressBar.isVisible = usersViewState.loaderVisible
+        binding.homeErrorLayout.root.isVisible = usersViewState.errorVisible
+        binding.homeUsersRecyclerView.isVisible = usersViewState.contentVisible
+        binding.homeEmptyLayout.root.isVisible = usersViewState.emptyContentVisible
+
+        if (usersViewState is UsersViewState.Content) {
+            adapter?.submitList(usersViewState.userItems)
         }
     }
 

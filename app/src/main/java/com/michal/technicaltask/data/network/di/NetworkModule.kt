@@ -1,4 +1,4 @@
-package com.michal.technicaltask.data.di
+package com.michal.technicaltask.data.network.di
 
 import com.michal.technicaltask.data.network.AuthInterceptor
 import com.squareup.moshi.Moshi
@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DataModule {
+object NetworkModule {
 
     @Provides
     @Singleton

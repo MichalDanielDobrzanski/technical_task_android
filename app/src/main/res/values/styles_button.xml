@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AddUserButton">
+        <item name="srcCompat">@drawable/ic_add_user</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+</resources>

@@ -8,6 +8,9 @@
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.1398148148148148" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.1398148148148148" />
+        <entry key="app/src/main/res/layout/item_home_user.xml" value="0.4390625" />
+        <entry key="app/src/main/res/layout/layout_empty_list.xml" value="0.4390625" />
+        <entry key="app/src/main/res/layout/layout_error.xml" value="0.22314814814814815" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.1398148148148148" />
       </map>
     </option>

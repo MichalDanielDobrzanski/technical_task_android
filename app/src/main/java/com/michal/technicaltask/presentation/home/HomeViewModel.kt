@@ -5,7 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import com.michal.technicaltask.data.scheduler.SchedulerProvider
 import com.michal.technicaltask.domain.user.all.GetAllUsersUseCase
 import com.michal.technicaltask.presentation.base.BaseViewModel
-import com.michal.technicaltask.presentation.home.model.ListViewState
+import com.michal.technicaltask.presentation.home.adapter.UserAdapterItemMapper
+import com.michal.technicaltask.presentation.home.model.UsersViewState
 import com.michal.technicaltask.presentation.utils.plusAssign
 import com.michal.technicaltask.presentation.utils.sequentialDisposable
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,11 +16,12 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getAllUsersUseCase: GetAllUsersUseCase,
-    private val schedulerProvider: SchedulerProvider
+    private val schedulerProvider: SchedulerProvider,
+    private val userAdapterItemMapper: UserAdapterItemMapper
 ) : BaseViewModel() {
 
-    private val _listViewState = MutableLiveData<ListViewState>(ListViewState.Loading)
-    val listViewState: LiveData<ListViewState> = _listViewState
+    private val _usersViewState = MutableLiveData<UsersViewState>(UsersViewState.Loading)
+    val usersViewState: LiveData<UsersViewState> = _usersViewState
 
     private val getAllUsersDisposable by sequentialDisposable(disposables)
 
@@ -30,15 +32,16 @@ class HomeViewModel @Inject constructor(
     private fun getAllUsers() {
         getAllUsersDisposable += getAllUsersUseCase
             .execute()
+            .map(userAdapterItemMapper::map)
             .observeOn(schedulerProvider.main)
             .subscribe(
                 { users ->
                     Timber.e("getAllUsers - onSuccess $users")
-                    _listViewState.value = ListViewState.Content(users)
+                    _usersViewState.value = UsersViewState.Content(users)
                 },
                 {
                     Timber.e("getAllUsers - onError $it")
-                    _listViewState.value = ListViewState.Error
+                    _usersViewState.value = UsersViewState.Error
                 }
             )
 

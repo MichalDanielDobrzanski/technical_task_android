@@ -6,4 +6,7 @@
         <item name="elevation">0dp</item>
     </style>
 
+    <style name="RetryButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:text">@string/network_error_retry_text</item>
+    </style>
 </resources>

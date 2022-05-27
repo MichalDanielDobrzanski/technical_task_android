@@ -1,7 +1,7 @@
-package com.michal.technicaltask.data.time.di
+package com.michal.time.di
 
-import com.michal.technicaltask.data.time.TimeRepository
-import com.michal.technicaltask.data.time.TimeRepositoryImpl
+import com.michal.time.TimeProvider
+import com.michal.time.TimeProviderImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,5 +14,5 @@ abstract class TimeBindingModule {
 
     @Binds
     @Singleton
-    abstract fun bindTimeRepository(timeRepositoryImpl: TimeRepositoryImpl): TimeRepository
+    abstract fun bindTimeRepository(timeRepositoryImpl: TimeProviderImpl): TimeProvider
 }

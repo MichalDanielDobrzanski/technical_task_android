@@ -2,4 +2,13 @@
     <string name="app_name">AndroidTechnicalTask</string>
 
     <string name="home_fragment_label">Home</string>
+
+    <string name="user_placeholder_name">Name:</string>
+    <string name="user_placeholder_email">Email:</string>
+    <string name="user_placeholder_creation">Created:</string>
+
+    <string name="network_error_message_text">Network error. Please retry.</string>
+    <string name="network_error_retry_text">Retry</string>
+
+    <string name="no_results_text">No results. The list is empty.</string>
 </resources>

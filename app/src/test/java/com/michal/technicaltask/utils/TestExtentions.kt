@@ -1,7 +1,10 @@
 package com.michal.technicaltask.utils
 
+import androidx.lifecycle.Observer
 import io.mockk.every
 import io.mockk.mockk
+import junit.framework.Assert.assertEquals
+import org.mockito.ArgumentCaptor
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
@@ -20,4 +23,14 @@ internal fun <T> T.toSuccessfulResponseMock(): Response<T> = mockk {
 fun <T> T.toFailedResponseMock(): Response<T> = mockk {
     every { isSuccessful } returns false
     every { body() } returns this@toFailedResponseMock
+}
+
+fun <T> Observer<T>.verifyCapturedArgumentsInOrder(
+    argumentCaptor: ArgumentCaptor<T>,
+    vararg args: T
+) {
+    verify(this, times(args.size)).onChanged(argumentCaptor.capture())
+    args.forEachIndexed { index, arg: T ->
+        assertEquals(arg, argumentCaptor.allValues[index])
+    }
 }

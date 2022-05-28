@@ -1,0 +1,26 @@
+ext {
+    appSetup = [
+            majorVersion     : 1,
+            minorVersion     : 0,
+            patchVersion     : 0,
+            compileSdkVersion: 32,
+            minSdkVersion    : 21
+    ]
+
+    getAppVersionCode = { appSetup.majorVersion * 10000 + appSetup.minorVersion * 100 + appSetup.patchVersion }
+    getAppVersionName = { "${appSetup.majorVersion}.${appSetup.minorVersion}.${appSetup.patchVersion}" }
+
+
+    versions = [
+            hilt       : "2.38.1",
+
+            desugaring : "1.1.5",
+
+            junit      : "4.13.2",
+
+            leak_canary: "2.9.1",
+            timber     : "5.0.1",
+
+            core_ktx   : "1.7.0",
+    ]
+}

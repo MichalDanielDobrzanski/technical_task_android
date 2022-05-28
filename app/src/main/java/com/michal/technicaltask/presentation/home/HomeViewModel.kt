@@ -88,7 +88,6 @@ class HomeViewModel @Inject constructor(
                 {
                     Timber.e("addNewUser - onError $it")
                     _operationFailedSingleLiveEvent.call()
-                    _usersViewState.value = UsersViewState.Content(_userItems)
                 }
             )
     }
@@ -107,7 +106,6 @@ class HomeViewModel @Inject constructor(
                 {
                     Timber.e("onUserRemoved - onError $it")
                     _operationFailedSingleLiveEvent.call()
-                    _usersViewState.value = UsersViewState.Content(_userItems)
                 }
             )
     }

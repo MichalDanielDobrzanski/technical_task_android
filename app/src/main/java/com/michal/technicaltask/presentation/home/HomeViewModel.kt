@@ -132,10 +132,12 @@ class HomeViewModel @Inject constructor(
             _userItems = refreshedUserList.toMutableList()
             _usersViewState.value = UsersViewState.Content(refreshedUserList)
         }
-
     }
 
     fun removeRefreshUserListListener() {
-        refreshContentDisposable?.dispose()
+        refreshContentDisposable?.let {
+            disposables.remove(it)
+            it.dispose()
+        }
     }
 }

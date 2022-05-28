@@ -22,4 +22,6 @@
     <string name="invalid_email_error">Invalid email address</string>
     <string name="empty_name_error">Name cannot be empty</string>
     <string name="operation_failed_error">Operation failed</string>
+
+    <string name="remove_user_text">Are you sure you want to remove this user?</string>
 </resources>

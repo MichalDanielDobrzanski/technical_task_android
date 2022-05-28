@@ -54,6 +54,7 @@ class AddNewUserUseCaseTest {
         whenever(usersRepository.addNewUser(name, email)).thenReturn(Single.just(dataUser))
         whenever(userMapper.map(dataUser)).thenReturn(testUser)
 
+        // when
         val testObserver = addNewUserUseCase.execute(
             AddNewUserUseCase.Params(
                 name = name,
@@ -61,9 +62,9 @@ class AddNewUserUseCaseTest {
             )
         ).test()
 
+        // then
         testObserver.assertValue(testUser)
         testObserver.assertComplete()
-
 
         verify(usersRepository).addNewUser(name, email)
         verify(userMapper).map(dataUser)
@@ -77,6 +78,7 @@ class AddNewUserUseCaseTest {
         val error = Throwable()
         whenever(usersRepository.addNewUser(name, email)).thenReturn(Single.error(error))
 
+        // when
         val testObserver = addNewUserUseCase.execute(
             AddNewUserUseCase.Params(
                 name = name,
@@ -84,6 +86,7 @@ class AddNewUserUseCaseTest {
             )
         ).test()
 
+        // then
         testObserver.assertError(error)
         testObserver.assertNotComplete()
 

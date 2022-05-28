@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.michal.technicaltask.data.scheduler.SchedulerProvider
 import com.michal.technicaltask.domain.user.all.GetAllUsersUseCase
-import com.michal.technicaltask.domain.user.all.model.Users
 import com.michal.technicaltask.domain.user.create.AddNewUserUseCase
+import com.michal.technicaltask.domain.user.remove.RemoveUserUseCase
 import com.michal.technicaltask.presentation.base.BaseViewModel
 import com.michal.technicaltask.presentation.home.adapter.UserAdapterItemMapper
 import com.michal.technicaltask.presentation.home.adapter.UserItem
@@ -21,6 +21,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getAllUsersUseCase: GetAllUsersUseCase,
     private val addNewUserUseCase: AddNewUserUseCase,
+    private val removeUserUseCase: RemoveUserUseCase,
     private val schedulerProvider: SchedulerProvider,
     private val userAdapterItemMapper: UserAdapterItemMapper
 ) : BaseViewModel() {
@@ -35,6 +36,7 @@ class HomeViewModel @Inject constructor(
 
     private val getAllUsersDisposable by sequentialDisposable(disposables)
     private val addNewUserDisposable by sequentialDisposable(disposables)
+    private val removeUserDisposable by sequentialDisposable(disposables)
 
     init {
         getAllUsers()
@@ -68,16 +70,33 @@ class HomeViewModel @Inject constructor(
                     email = email
                 )
             )
+            .map(userAdapterItemMapper::mapUser)
             .observeOn(schedulerProvider.main)
             .doOnSubscribe { _usersViewState.value = UsersViewState.Loading() }
             .subscribe(
-                { user ->
+                { userItem ->
                     Timber.v("addNewUser - onComplete")
-
-                    val userItem = userAdapterItemMapper.map(Users(listOf(user))).first()
                     _userItems.add(userItem)
-
+                    _usersViewState.value = UsersViewState.Content(_userItems.toList())
+                },
+                {
+                    Timber.e("addNewUser - onError $it")
+                    _operationFailedSingleLiveEvent.call()
                     _usersViewState.value = UsersViewState.Content(_userItems)
+                }
+            )
+    }
+
+    fun onUserRemoved(userItem: UserItem) {
+        removeUserDisposable += removeUserUseCase
+            .execute(userItem.id)
+            .observeOn(schedulerProvider.main)
+            .doOnSubscribe { _usersViewState.value = UsersViewState.Loading() }
+            .subscribe(
+                {
+                    Timber.v("addNewUser - onComplete")
+                    _userItems.remove(userItem)
+                    _usersViewState.value = UsersViewState.Content(_userItems.toList())
                 },
                 {
                     Timber.e("addNewUser - onError $it")

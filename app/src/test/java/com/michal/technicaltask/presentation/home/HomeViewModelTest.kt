@@ -6,6 +6,7 @@ import com.michal.technicaltask.domain.user.all.GetAllUsersUseCase
 import com.michal.technicaltask.domain.user.all.model.User
 import com.michal.technicaltask.domain.user.all.model.Users
 import com.michal.technicaltask.domain.user.create.AddNewUserUseCase
+import com.michal.technicaltask.domain.user.remove.RemoveUserUseCase
 import com.michal.technicaltask.presentation.home.adapter.UserAdapterItemMapper
 import com.michal.technicaltask.presentation.home.adapter.UserItem
 import com.michal.technicaltask.presentation.home.model.UsersViewState
@@ -66,6 +67,9 @@ class HomeViewModelTest {
     private lateinit var addNewUserUseCase: AddNewUserUseCase
 
     @Mock
+    private lateinit var removeUserUseCase: RemoveUserUseCase
+
+    @Mock
     private lateinit var userAdapterItemMapper: UserAdapterItemMapper
 
     @Mock
@@ -95,6 +99,7 @@ class HomeViewModelTest {
         viewModel = HomeViewModel(
             getAllUsersUseCase,
             addNewUserUseCase,
+            removeUserUseCase,
             TestSchedulerProvider(),
             userAdapterItemMapper,
         )
@@ -125,6 +130,7 @@ class HomeViewModelTest {
         viewModel = HomeViewModel(
             getAllUsersUseCase,
             addNewUserUseCase,
+            removeUserUseCase,
             TestSchedulerProvider(),
             userAdapterItemMapper,
         )
@@ -152,6 +158,7 @@ class HomeViewModelTest {
         viewModel = HomeViewModel(
             getAllUsersUseCase,
             addNewUserUseCase,
+            removeUserUseCase,
             TestSchedulerProvider(),
             userAdapterItemMapper,
         )

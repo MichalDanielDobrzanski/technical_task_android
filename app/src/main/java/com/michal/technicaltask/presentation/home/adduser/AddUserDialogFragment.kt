@@ -1,7 +1,6 @@
 package com.michal.technicaltask.presentation.home.adduser
 
 import android.os.Bundle
-import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +8,17 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import com.michal.technicaltask.R
 import com.michal.technicaltask.databinding.FragmentAddUserBinding
 import com.michal.technicaltask.presentation.home.adduser.model.AddUserParcel
 import com.michal.technicaltask.presentation.utils.setWidthPercent
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AddUserDialogFragment : DialogFragment() {
+
+    private val viewModel: AddUserViewModel by viewModels()
 
     private var _binding: FragmentAddUserBinding? = null
     private val binding get() = requireNotNull(_binding)
@@ -38,44 +42,48 @@ class AddUserDialogFragment : DialogFragment() {
         }
 
         binding.addUserOkButton.setOnClickListener {
-            if (currentName.isNullOrEmpty()) {
-                binding.addUserNameEditText.error = getString(R.string.empty_name_error)
-            } else if (!isValidEmail(currentEmail)) {
-                binding.addUserEmailEditText.error = getString(R.string.invalid_email_error)
-            } else {
-                setFragmentResult(
-                    ADD_USER_DIALOG_REQUEST_KEY, bundleOf(
-                        USER_PARCEL to AddUserParcel(
-                            name = currentName!!,
-                            email = currentEmail!!
+            viewModel.validateNameAndEmail(
+                currentName,
+                currentEmail,
+                onInvalidName = { showNameError() },
+                onInvalidEmail = { showEmailError() },
+                onValidData = { name, email ->
+                    setFragmentResult(
+                        ADD_USER_DIALOG_REQUEST_KEY, bundleOf(
+                            USER_PARCEL to AddUserParcel(
+                                name = name,
+                                email = email
+                            )
                         )
                     )
-                )
-                dismiss()
-            }
+                    dismiss()
+                }
+            )
         }
 
         binding.addUserNameEditText.addTextChangedListener { text ->
             val name = text.toString()
-            if (name.isEmpty()) {
-                binding.addUserNameEditText.error = getString(R.string.empty_name_error)
+            if (viewModel.isValidName(name)) {
+                currentName = name
             } else {
-                currentName = text.toString()
+                showNameError()
             }
         }
 
         binding.addUserEmailEditText.addTextChangedListener { text ->
             val email = text.toString()
-            if (isValidEmail(email)) {
-                currentEmail = text.toString()
-            } else {
-                binding.addUserEmailEditText.error = getString(R.string.invalid_email_error)
+            if (viewModel.isValidEmail(email)) {
+                currentEmail = email
             }
         }
     }
 
-    private fun isValidEmail(email: String?): Boolean {
-        return !email.isNullOrBlank() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    private fun showEmailError() {
+        binding.addUserEmailEditText.error = getString(R.string.invalid_email_error)
+    }
+
+    private fun showNameError() {
+        binding.addUserNameEditText.error = getString(R.string.empty_name_error)
     }
 
     override fun onResume() {

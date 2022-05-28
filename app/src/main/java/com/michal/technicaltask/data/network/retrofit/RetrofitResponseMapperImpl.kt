@@ -13,4 +13,14 @@ class RetrofitResponseMapperImpl @Inject constructor() : RetrofitResponseMapper 
         errorCode = response.code(),
         message = null
     )
+
+    @Throws(HttpApiException::class)
+    override fun <T> mapEmptyHttpResponse(response: Response<T>) {
+        if (!response.isSuccessful) {
+            throw HttpApiException(
+                errorCode = response.code(),
+                message = null
+            )
+        }
+    }
 }

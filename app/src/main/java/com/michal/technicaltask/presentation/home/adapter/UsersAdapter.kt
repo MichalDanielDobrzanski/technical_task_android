@@ -7,11 +7,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.michal.technicaltask.databinding.ItemHomeUserBinding
 
-class UsersAdapter : ListAdapter<UserItem, UsersAdapter.ViewHolder>(ItemCallback()) {
+class UsersAdapter(
+    private val onUserRemoved: (UserItem) -> Unit
+) : ListAdapter<UserItem, UsersAdapter.ViewHolder>(ItemCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            binding = ItemHomeUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            binding = ItemHomeUserBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            onUserRemoved = onUserRemoved
         )
     }
 
@@ -20,7 +23,8 @@ class UsersAdapter : ListAdapter<UserItem, UsersAdapter.ViewHolder>(ItemCallback
     }
 
     class ViewHolder(
-        private val binding: ItemHomeUserBinding
+        private val binding: ItemHomeUserBinding,
+        private val onUserRemoved: (UserItem) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(user: UserItem) {
@@ -29,10 +33,15 @@ class UsersAdapter : ListAdapter<UserItem, UsersAdapter.ViewHolder>(ItemCallback
             binding.userEmailText.text = user.email
 
             binding.userCreationText.text = user.creationTimeText
+
+            binding.root.setOnLongClickListener {
+                onUserRemoved.invoke(user)
+                true
+            }
         }
     }
 
-    class ItemCallback : DiffUtil.ItemCallback<UserItem>() {
+    object ItemCallback : DiffUtil.ItemCallback<UserItem>() {
 
         override fun areItemsTheSame(oldItem: UserItem, newItem: UserItem): Boolean = oldItem.id == newItem.id
 

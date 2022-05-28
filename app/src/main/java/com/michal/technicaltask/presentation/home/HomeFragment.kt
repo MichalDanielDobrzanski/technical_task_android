@@ -17,6 +17,10 @@ import com.michal.technicaltask.presentation.home.adduser.AddUserDialogFragment
 import com.michal.technicaltask.presentation.home.adduser.USER_PARCEL
 import com.michal.technicaltask.presentation.home.adduser.model.AddUserParcel
 import com.michal.technicaltask.presentation.home.model.UsersViewState
+import com.michal.technicaltask.presentation.home.removeuser.REMOVE_USER_DIALOG_BUNDLE_KEY
+import com.michal.technicaltask.presentation.home.removeuser.REMOVE_USER_DIALOG_REQUEST_KEY
+import com.michal.technicaltask.presentation.home.removeuser.RemoveUserDialogFragment
+import com.michal.technicaltask.presentation.home.removeuser.RemoveUserParcel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,6 +39,12 @@ class HomeFragment : Fragment() {
             val addUserParcel = bundle.getParcelable<AddUserParcel>(USER_PARCEL) ?: return@setFragmentResultListener
             val (name, email) = addUserParcel
             viewModel.addNewUser(name, email)
+        }
+        setFragmentResultListener(REMOVE_USER_DIALOG_REQUEST_KEY) { _, bundle ->
+            val removeUserParcel =
+                bundle.getParcelable<RemoveUserParcel>(REMOVE_USER_DIALOG_BUNDLE_KEY) ?: return@setFragmentResultListener
+            val userItem = removeUserParcel.toUserItem()
+            viewModel.onUserRemoved(userItem)
         }
     }
 
@@ -63,7 +73,9 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView() {
         val recyclerView = binding.homeUsersRecyclerView
-        val adapter = UsersAdapter()
+        val adapter = UsersAdapter { userItem ->
+            RemoveUserDialogFragment.create(userItem).show(parentFragmentManager, null)
+        }
         recyclerView.adapter = adapter
         this.adapter = adapter
     }

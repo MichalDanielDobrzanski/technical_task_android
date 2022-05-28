@@ -12,4 +12,7 @@ interface RetrofitResponseMapper {
      */
     @Throws(HttpApiException::class)
     fun <T> mapHttpResponse(response: Response<T>): T
+
+    @Throws(HttpApiException::class)
+    fun <T> mapEmptyHttpResponse(response: Response<T>)
 }

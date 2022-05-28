@@ -1,12 +1,9 @@
 package com.michal.technicaltask.presentation.home.adduser
 
 import android.util.Patterns
-import com.michal.technicaltask.presentation.base.BaseViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-@HiltViewModel
-class AddUserViewModel @Inject constructor() : BaseViewModel() {
+class AddUserDelegate @Inject constructor() {
 
     fun validateNameAndEmail(
         currentName: String?,

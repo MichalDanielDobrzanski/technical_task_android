@@ -8,14 +8,13 @@ class TimeFormatterImpl @Inject constructor(
     private val timeRepository: TimeProvider
 ) : TimeFormatter {
 
-    override fun formatAsRelativeTimeToNow(dateItem: DateItem): String {
+    override fun formatAsRelativeTimeToAppStart(dateItem: DateItem): String {
         val thenTimestamp = dateItem.timestamp
-        val nowTimestamp = timeRepository.getNow().timestamp
+        val now = timeRepository.getNow().timestamp
         return DateUtils.getRelativeTimeSpanString(
             thenTimestamp,
-            nowTimestamp,
-            DateUtils.MINUTE_IN_MILLIS
+            now,
+            DateUtils.SECOND_IN_MILLIS
         ).toString()
     }
-
 }

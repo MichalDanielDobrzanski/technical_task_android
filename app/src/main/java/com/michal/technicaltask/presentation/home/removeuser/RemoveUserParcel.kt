@@ -2,6 +2,7 @@ package com.michal.technicaltask.presentation.home.removeuser
 
 import android.os.Parcelable
 import com.michal.technicaltask.presentation.home.adapter.UserItem
+import com.michal.time.model.DateItem
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -9,6 +10,7 @@ data class RemoveUserParcel(
     val id: Int,
     val name: String,
     val email: String,
+    val creationDate: DateItem,
     val creationTimeText: String
 ) : Parcelable {
 
@@ -18,7 +20,8 @@ data class RemoveUserParcel(
                 id = id,
                 name = name,
                 email = email,
-                creationTimeText = creationTimeText
+                creationDate = creationDate,
+                creationRelativeTimeText = creationTimeText
             )
         }
     }
@@ -30,7 +33,8 @@ data class RemoveUserParcel(
                     id = id,
                     name = name,
                     email = email,
-                    creationTimeText = creationTimeText
+                    creationDate = creationDate,
+                    creationTimeText = creationRelativeTimeText
                 )
             }
         }

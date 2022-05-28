@@ -2,6 +2,7 @@ package com.michal.technicaltask.presentation.home
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.michal.technicaltask.domain.refresh.RefreshContentUseCase
 import com.michal.technicaltask.domain.user.all.GetAllUsersUseCase
 import com.michal.technicaltask.domain.user.all.model.User
 import com.michal.technicaltask.domain.user.all.model.Users
@@ -13,6 +14,7 @@ import com.michal.technicaltask.presentation.home.model.UsersViewState
 import com.michal.technicaltask.utils.TestSchedulerProvider
 import com.michal.technicaltask.utils.verifyNone
 import com.michal.technicaltask.utils.whenever
+import com.michal.time.TimeFormatter
 import io.mockk.mockk
 import io.reactivex.rxjava3.core.Single
 import org.junit.Before
@@ -46,13 +48,15 @@ class HomeViewModelTest {
             id = 1,
             name = "test1",
             email = "email1",
-            creationTimeText = ""
+            creationDate = mockk(),
+            creationRelativeTimeText = "",
         ),
         UserItem(
             id = 2,
             name = "test2",
             email = "email2",
-            creationTimeText = ""
+            creationDate = mockk(),
+            creationRelativeTimeText = "",
         ),
     )
 
@@ -70,7 +74,13 @@ class HomeViewModelTest {
     private lateinit var removeUserUseCase: RemoveUserUseCase
 
     @Mock
+    private lateinit var refreshContentUseCase: RefreshContentUseCase
+
+    @Mock
     private lateinit var userAdapterItemMapper: UserAdapterItemMapper
+
+    @Mock
+    private lateinit var timeFormatter: TimeFormatter
 
     @Mock
     private lateinit var testObserver: Observer<UsersViewState>
@@ -100,7 +110,9 @@ class HomeViewModelTest {
             getAllUsersUseCase,
             addNewUserUseCase,
             removeUserUseCase,
+            refreshContentUseCase,
             TestSchedulerProvider(),
+            timeFormatter,
             userAdapterItemMapper,
         )
         viewModel.usersViewState.observeForever(testObserver)
@@ -131,12 +143,15 @@ class HomeViewModelTest {
             getAllUsersUseCase,
             addNewUserUseCase,
             removeUserUseCase,
+            refreshContentUseCase,
             TestSchedulerProvider(),
+            timeFormatter,
             userAdapterItemMapper,
         )
         viewModel.usersViewState.observeForever(testObserver)
 
         // then
+        verify(testObserver).onChanged(expectedContent)
         verify(testObserver).onChanged(expectedContent)
         verify(getAllUsersUseCase).execute()
         verify(userAdapterItemMapper).map(emptyUsers)
@@ -159,7 +174,9 @@ class HomeViewModelTest {
             getAllUsersUseCase,
             addNewUserUseCase,
             removeUserUseCase,
+            refreshContentUseCase,
             TestSchedulerProvider(),
+            timeFormatter,
             userAdapterItemMapper,
         )
         viewModel.usersViewState.observeForever(testObserver)
@@ -169,5 +186,4 @@ class HomeViewModelTest {
         verify(getAllUsersUseCase).execute()
         verifyNone(userAdapterItemMapper).map(testUsers)
     }
-
 }

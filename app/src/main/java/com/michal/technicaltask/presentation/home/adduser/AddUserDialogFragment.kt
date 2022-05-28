@@ -8,17 +8,18 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
 import com.michal.technicaltask.R
 import com.michal.technicaltask.databinding.FragmentAddUserBinding
 import com.michal.technicaltask.presentation.home.adduser.model.AddUserParcel
 import com.michal.technicaltask.presentation.utils.setWidthPercent
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AddUserDialogFragment : DialogFragment() {
 
-    private val viewModel: AddUserViewModel by viewModels()
+    @Inject
+    lateinit var addUserDelegate: AddUserDelegate
 
     private var _binding: FragmentAddUserBinding? = null
     private val binding get() = requireNotNull(_binding)
@@ -42,7 +43,7 @@ class AddUserDialogFragment : DialogFragment() {
         }
 
         binding.addUserOkButton.setOnClickListener {
-            viewModel.validateNameAndEmail(
+            addUserDelegate.validateNameAndEmail(
                 currentName,
                 currentEmail,
                 onInvalidName = { showNameError() },
@@ -63,7 +64,7 @@ class AddUserDialogFragment : DialogFragment() {
 
         binding.addUserNameEditText.addTextChangedListener { text ->
             val name = text.toString()
-            if (viewModel.isValidName(name)) {
+            if (addUserDelegate.isValidName(name)) {
                 currentName = name
             } else {
                 showNameError()
@@ -72,7 +73,7 @@ class AddUserDialogFragment : DialogFragment() {
 
         binding.addUserEmailEditText.addTextChangedListener { text ->
             val email = text.toString()
-            if (viewModel.isValidEmail(email)) {
+            if (addUserDelegate.isValidEmail(email)) {
                 currentEmail = email
             }
         }

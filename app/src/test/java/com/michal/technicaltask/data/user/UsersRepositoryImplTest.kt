@@ -4,7 +4,6 @@ import com.michal.technicaltask.data.network.retrofit.RetrofitResponseMapper
 import com.michal.technicaltask.data.network.retrofit.model.HttpApiException
 import com.michal.technicaltask.data.user.model.AddNewUserRequestData
 import com.michal.technicaltask.data.user.model.UserData
-import com.michal.technicaltask.utils.mockRetrofitResponseMapper
 import com.michal.technicaltask.utils.toFailedResponseMock
 import com.michal.technicaltask.utils.toSuccessfulResponseMock
 import com.michal.technicaltask.utils.whenever
@@ -14,6 +13,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
+import retrofit2.Response
 
 class UsersRepositoryImplTest {
 
@@ -43,7 +43,6 @@ class UsersRepositoryImplTest {
     @Test
     fun `Should get all users`() {
         // given
-        retrofitResponseMapper = mockRetrofitResponseMapper()
         val userDataList = listOf(
             testUserData,
             UserData(
@@ -52,7 +51,9 @@ class UsersRepositoryImplTest {
                 email = "email"
             )
         )
-        whenever(usersApiService.getAllUsers()).thenReturn(Single.just(userDataList.toSuccessfulResponseMock()))
+        val response = userDataList.toSuccessfulResponseMock()
+        whenever(usersApiService.getAllUsers()).thenReturn(Single.just(response))
+        whenever(retrofitResponseMapper.mapHttpResponse(response)).thenReturn(userDataList)
 
         // when
         val testObserver = usersRepository.getAllUsers().test()
@@ -95,16 +96,18 @@ class UsersRepositoryImplTest {
     @Test
     fun `Should add new user`() {
         // given
-        retrofitResponseMapper = mockRetrofitResponseMapper()
         val name = "dummyName"
         val email = "dummyEmail"
         val addNewUserRequestData = AddNewUserRequestData(
             name = name,
             email = email,
-            gender = "gender",
-            status = "status"
+            gender = "male",
+            status = "active"
         )
-        whenever(usersApiService.addNewUser(addNewUserRequestData)).thenReturn(Single.just(testUserData.toSuccessfulResponseMock()))
+
+        val response: Response<UserData> = testUserData.toSuccessfulResponseMock()
+        whenever(usersApiService.addNewUser(addNewUserRequestData)).thenReturn(Single.just(response))
+        whenever(retrofitResponseMapper.mapHttpResponse(response)).thenReturn(testUserData)
 
         // when
         val testObserver = usersRepository.addNewUser(
@@ -178,10 +181,10 @@ class UsersRepositoryImplTest {
     @Test
     fun `Should remove user`() {
         // given
-        retrofitResponseMapper = mockRetrofitResponseMapper()
         val userId = 123
 
-        whenever(usersApiService.removeUser(userId)).thenReturn(Single.just(Unit.toSuccessfulResponseMock()))
+        val response = Unit.toSuccessfulResponseMock()
+        whenever(usersApiService.removeUser(userId)).thenReturn(Single.just(response))
 
         // when
         val testObserver = usersRepository.removeUser(userId).test()

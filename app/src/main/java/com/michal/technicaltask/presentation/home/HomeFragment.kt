@@ -72,11 +72,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val recyclerView = binding.homeUsersRecyclerView
         val adapter = UsersAdapter { userItem ->
             RemoveUserDialogFragment.create(userItem).show(parentFragmentManager, null)
         }
-        recyclerView.adapter = adapter
+        binding.homeUsersRecyclerView.adapter = adapter
         this.adapter = adapter
     }
 
@@ -97,6 +96,16 @@ class HomeFragment : Fragment() {
         if (usersViewState is UsersViewState.Content) {
             adapter?.submitList(usersViewState.userItems)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.listenToRefreshUserList()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.removeRefreshUserListListener()
     }
 
     override fun onDestroyView() {

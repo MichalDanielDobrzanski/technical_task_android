@@ -18,7 +18,8 @@ class UserAdapterItemMapperImpl @Inject constructor(
             id = user.id,
             name = user.name,
             email = user.email,
-            creationTimeText = timeFormatter.formatAsRelativeTimeToNow(user.creationDate)
+            creationDate = user.creationDate,
+            creationRelativeTimeText = timeFormatter.formatAsRelativeTimeToAppStart(user.creationDate)
         )
     }
 }

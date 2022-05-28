@@ -1,6 +1,8 @@
 package com.michal.technicaltask.presentation.home.di
 
+import com.michal.technicaltask.data.scheduler.SchedulerProvider
 import com.michal.technicaltask.data.user.UsersRepository
+import com.michal.technicaltask.domain.refresh.RefreshContentUseCase
 import com.michal.technicaltask.domain.user.all.GetAllUsersUseCase
 import com.michal.technicaltask.domain.user.all.mapper.GetAllUsersMapper
 import com.michal.technicaltask.domain.user.all.mapper.GetAllUsersMapperImpl
@@ -59,4 +61,10 @@ object HomeModule {
     fun provideRemoveUserUseCase(
         usersRepository: UsersRepository,
     ): RemoveUserUseCase = RemoveUserUseCase(usersRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideRefreshContentUseCase(
+        schedulerProvider: SchedulerProvider
+    ): RefreshContentUseCase = RefreshContentUseCase(schedulerProvider)
 }

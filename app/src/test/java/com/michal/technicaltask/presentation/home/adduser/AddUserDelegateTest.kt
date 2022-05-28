@@ -8,20 +8,20 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AddUserViewModelTest {
+class AddUserDelegateTest {
 
-    private lateinit var viewModel: AddUserViewModel
+    private lateinit var delegate: AddUserDelegate
 
     @Before
     fun setup() {
-        viewModel = AddUserViewModel()
+        delegate = AddUserDelegate()
     }
 
     @Test
     fun `Should make null names invalid`() {
         val name = null
 
-        val result = viewModel.isValidName(name)
+        val result = delegate.isValidName(name)
 
         assertFalse(result)
     }
@@ -30,7 +30,7 @@ class AddUserViewModelTest {
     fun `Should make empty names invalid`() {
         val name = ""
 
-        val result = viewModel.isValidName(name)
+        val result = delegate.isValidName(name)
 
         assertFalse(result)
     }
@@ -39,7 +39,7 @@ class AddUserViewModelTest {
     fun `Should make non empty names valid`() {
         val name = "a"
 
-        val result = viewModel.isValidName(name)
+        val result = delegate.isValidName(name)
 
         assertTrue(result)
     }
@@ -48,7 +48,7 @@ class AddUserViewModelTest {
     fun `Should make null emails invalid`() {
         val email = null
 
-        val result = viewModel.isValidEmail(email)
+        val result = delegate.isValidEmail(email)
 
         assertFalse(result)
     }
@@ -57,7 +57,7 @@ class AddUserViewModelTest {
     fun `Should make empty emails invalid`() {
         val email = ""
 
-        val result = viewModel.isValidEmail(email)
+        val result = delegate.isValidEmail(email)
 
         assertFalse(result)
     }
@@ -66,14 +66,14 @@ class AddUserViewModelTest {
     fun `Should make properly formatted emails valid`() {
         val name = "a@test.com"
 
-        val result = viewModel.isValidEmail(name)
+        val result = delegate.isValidEmail(name)
 
         assertTrue(result)
     }
 
     @Test
     fun `Should call the name validator callback first`() {
-        viewModel.validateNameAndEmail(
+        delegate.validateNameAndEmail(
             null,
             null,
             { assert(true) },
@@ -83,7 +83,7 @@ class AddUserViewModelTest {
 
     @Test
     fun `Should call the email validator callback when name is correct`() {
-        viewModel.validateNameAndEmail(
+        delegate.validateNameAndEmail(
             "validName",
             null,
             { assert(false) },
@@ -91,10 +91,9 @@ class AddUserViewModelTest {
         ) { _, _ -> assert(false) }
     }
 
-
     @Test
     fun `Should call the success callback for valid name and email`() {
-        viewModel.validateNameAndEmail(
+        delegate.validateNameAndEmail(
             "validName",
             "email@domain.com",
             { assert(false) },

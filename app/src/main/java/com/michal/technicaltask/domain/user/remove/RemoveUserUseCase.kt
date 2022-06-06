@@ -1,15 +1,14 @@
 package com.michal.technicaltask.domain.user.remove
 
 import com.michal.technicaltask.data.user.UsersRepository
-import com.michal.technicaltask.domain.base.CompletableParamsUseCase
-import io.reactivex.rxjava3.core.Completable
+import com.michal.technicaltask.domain.base.VoidUseCase
 import javax.inject.Inject
 
 class RemoveUserUseCase @Inject constructor(
     private val usersRepository: UsersRepository
-) : CompletableParamsUseCase<Int> {
+) : VoidUseCase<Int> {
 
-    override fun execute(params: Int): Completable {
+    override suspend fun execute(params: Int) {
         return usersRepository.removeUser(params)
     }
 }

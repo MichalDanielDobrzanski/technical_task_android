@@ -2,7 +2,6 @@ package com.michal.technicaltask.data.user
 
 import com.michal.technicaltask.data.user.model.AddNewUserRequestData
 import com.michal.technicaltask.data.user.model.UserData
-import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -13,11 +12,11 @@ import retrofit2.http.Path
 interface UsersApiService {
 
     @GET("users")
-    fun getAllUsers(): Single<Response<List<UserData>>>
+    suspend fun getAllUsers(): Response<List<UserData>>
 
     @POST("users")
-    fun addNewUser(@Body addNewUserRequestData: AddNewUserRequestData): Single<Response<UserData>>
+    suspend fun addNewUser(@Body addNewUserRequestData: AddNewUserRequestData): Response<UserData>
 
     @DELETE("users/{userId}")
-    fun removeUser(@Path("userId") userId: Int): Single<Response<Unit>>
+    suspend fun removeUser(@Path("userId") userId: Int): Response<Unit>
 }

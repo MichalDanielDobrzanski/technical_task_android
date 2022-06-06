@@ -3,8 +3,6 @@ package com.michal.technicaltask.data.user
 import com.michal.technicaltask.data.network.retrofit.RetrofitResponseMapper
 import com.michal.technicaltask.data.user.model.AddNewUserRequestData
 import com.michal.technicaltask.data.user.model.UserData
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
 class UsersRepositoryImpl @Inject constructor(
@@ -12,28 +10,24 @@ class UsersRepositoryImpl @Inject constructor(
     private val retrofitResponseMapper: RetrofitResponseMapper,
 ) : UsersRepository {
 
-    override fun getAllUsers(): Single<List<UserData>> {
-        return usersApiService.getAllUsers()
-            .map(retrofitResponseMapper::mapHttpResponse)
+    override suspend fun getAllUsers(): List<UserData> {
+        return retrofitResponseMapper.mapHttpResponse(usersApiService.getAllUsers())
     }
 
-    override fun addNewUser(name: String, email: String): Single<UserData> {
+    override suspend fun addNewUser(name: String, email: String): UserData {
         val requestData = AddNewUserRequestData(
             name = name,
             email = email,
             gender = FALLBACK_GENDER,
             status = FALLBACK_STATUS
         )
-        return usersApiService.addNewUser(requestData)
-            .map(retrofitResponseMapper::mapHttpResponse)
+        return retrofitResponseMapper.mapHttpResponse(usersApiService.addNewUser(requestData))
     }
 
-    override fun removeUser(userId: Int): Completable {
-        return usersApiService.removeUser(userId)
-            .map { response ->
-                retrofitResponseMapper.mapEmptyHttpResponse(response)
-            }
-            .ignoreElement()
+    override suspend fun removeUser(userId: Int) {
+        retrofitResponseMapper.mapEmptyHttpResponse(
+            usersApiService.removeUser(userId)
+        )
     }
 }
 

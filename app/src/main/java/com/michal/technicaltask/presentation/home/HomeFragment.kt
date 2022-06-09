@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
     private var adapter: UsersAdapter? = null
 
     private var _binding: FragmentHomeBinding? = null
-    val binding get() = requireNotNull(_binding)
+    private val binding get() = requireNotNull(_binding)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

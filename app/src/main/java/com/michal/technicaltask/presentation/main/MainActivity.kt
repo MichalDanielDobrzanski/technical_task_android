@@ -2,9 +2,9 @@ package com.michal.technicaltask.presentation.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.fragment.NavHostFragment
 import com.michal.technicaltask.R
 import com.michal.technicaltask.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint

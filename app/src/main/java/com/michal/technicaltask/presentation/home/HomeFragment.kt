@@ -9,6 +9,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.michal.technicaltask.R
 import com.michal.technicaltask.databinding.FragmentHomeBinding
 import com.michal.technicaltask.presentation.home.adapter.UsersAdapter
@@ -54,13 +56,13 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         setupRecyclerView()
+        observeRefreshingUser()
 
         binding.addUserButton.setOnClickListener {
             AddUserDialogFragment().show(parentFragmentManager, null)
@@ -69,6 +71,18 @@ class HomeFragment : Fragment() {
         binding.homeErrorLayout.retryButton.setOnClickListener {
             viewModel.getAllUsers()
         }
+    }
+
+    private fun observeRefreshingUser() {
+        viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onResume(owner: LifecycleOwner) {
+                viewModel.listenToRefreshUserList()
+            }
+
+            override fun onPause(owner: LifecycleOwner) {
+                viewModel.removeRefreshUserListListener()
+            }
+        })
     }
 
     private fun setupRecyclerView() {
@@ -96,16 +110,6 @@ class HomeFragment : Fragment() {
         if (usersViewState is UsersViewState.Content) {
             adapter?.submitList(usersViewState.userItems)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.listenToRefreshUserList()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.removeRefreshUserListListener()
     }
 
     override fun onDestroyView() {
